@@ -1,16 +1,18 @@
 const mysql = require("mysql2");
 
 const connection = mysql.createConnection({
-    host: "200.251.88.59",
-    user: "LEDAXTST",
-    password: "qj2ydo1r",
-    database: "TST"
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: ""
   });
 
   connection.connect(function(err) {
     if (err) throw err;
     console.log("Connected to the MySQL database.");
   });
+
+  
 /*
   connection.query(
     `SELECT * FROM TGFPRO`,
