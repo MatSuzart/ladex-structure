@@ -1,3 +1,4 @@
-.node_modules
-
-.database/*
+# Ignore first 5 lines of dbconnection.js
+dbconnection.js
+[Dbconnection.js]
+1,2,3,4,5
