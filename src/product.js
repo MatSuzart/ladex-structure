@@ -2,7 +2,7 @@ const express = ('express');
 const oracledb = require('oracledb');
 const getConnection = require('./database/dbconnection').getConnection;
 
-async function run() {
+async function getProducts() {
   const connection = await getConnection();
   if (connection) {
     try {
@@ -28,4 +28,4 @@ async function run() {
 
 
  
-module.exports = { run }
+module.exports = { getProducts }

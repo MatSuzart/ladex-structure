@@ -1,9 +1,9 @@
 const express = require('express');
 const route = express.Router();
-const run = require('../product').run;
+const getProducts = require('../product').getProducts;
 
 route.get('/products', (req, res) => {
-  run().then(result => {
+  getProducts().then(result => {
     res.send(result);
   }).catch(err => {
     res.send(err);
