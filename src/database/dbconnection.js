@@ -1,22 +1,24 @@
 const oracledb = require('oracledb');
+require('dotenv').config();
 
 async function getConnection() {
-    let connection;
-    try {
-        connection = await oracledb.getConnection({
-            user: "",
-            password: "",
-            connectString: ""
-        });
-        console.log("Conexão realizada com sucesso");
-    } catch (error) {
-        console.error(error);
-        return;
-    }
-    return connection;
+  let connection;
+  try {
+    await oracledb.initOracleClient({ libDir : process.env.LD_LIBRARY_PATH });
+    connection = await oracledb.getConnection({
+      user: process.env.USER,
+      password: process.env.PASSWORD,
+      connectString: process.env.CONNECT_STRING
+    });    
+    console.log("Conexão realizada com sucesso");
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+  return connection;
 }
 
-module.exports = { getConnection }
+module.exports = { getConnection };
 
 
 /*
