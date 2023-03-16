@@ -14,46 +14,58 @@ async function getProducts(linha, potencia, conjuntoOtico, temperaturadeCor, cor
       params.linha = await connection.execute(
         `SELECT SUBSTR(descrprod, 1, INSTR(descrprod, '.')-1) || '.' || SUBSTR(descrprod, INSTR(descrprod, '.')+1, 3)
         FROM tgfpro
-        WHERE REGEXP_LIKE(compldesc, '^8[1-9].*$');`
+        WHERE REGEXP_LIKE(compldesc, '^8[1-9].*$')`
       );
     }
 
     if (potencia) {
       params.potencia = await connection.execute(
-        `SELECT descrprod FROM tgfpro WHERE LENGTH(descrprod) = 3 AND REGEXP_LIKE(descrprod, '^[0-9]{3}$')`
+        `SELECT SUBSTR(descrprod, INSTR(descrprod, '.')+1, 3)
+        FROM tgfpro
+        WHERE REGEXP_LIKE(descrprod, '^\\d{3}\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+$')`
       );
     }
 
     if (conjuntoOtico) {
       params.conjuntoOtico = await connection.execute(
-        `SELECT descrprod FROM tgfpro WHERE LENGTH(descrprod) = 4 AND REGEXP_LIKE(descrprod, '^[0-9]{3}[A-Za-z]$')`
+        `SELECT SUBSTR(descrprod, INSTR(descrprod, '.', 1, 2)+1, 1)
+        FROM tgfpro
+        WHERE REGEXP_LIKE(descrprod, '^\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+$')`
       );
     }
 
     if (temperaturadeCor) {
       params.temperaturadeCor = await connection.execute(
-        `SELECT descrprod FROM tgfpro WHERE LENGTH(descrprod) = 3 AND REGEXP_LIKE(descrprod, '^K[0-9]{2}$')`
+        `SELECT SUBSTR(descrprod, INSTR(descrprod, '.', 1, 3)+1, 3)
+        FROM tgfpro
+        WHERE REGEXP_LIKE(descrprod, '^\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+$')`
       );
     }
 
     if (cordePintura) {
       params.cordePintura = await connection.execute(
-        `SELECT descrprod FROM tgfpro WHERE LENGTH(descrprod) = 2 AND REGEXP_LIKE(descrprod, '^[A-Za-z]{2}$')`
+        `SELECT SUBSTR(descrprod, INSTR(descrprod, '.', 1, 4)+1, 2)
+        FROM tgfpro
+        WHERE REGEXP_LIKE(descrprod, '^\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+$')`
       );
     }
 
     if (Fixacao) {
       params.Fixacao = await connection.execute(
-        `SELECT descrprod FROM tgfpro WHERE LENGTH(descrprod) = 2`
+        `SELECT SUBSTR(descrprod, INSTR(descrprod, '.', 1, 5)+1, 2)
+        FROM tgfpro
+        WHERE REGEXP_LIKE(descrprod, '^\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+$')`
       );
     }
 
     if (Adicionais) {
       params.Adicionais = await connection.execute(
-        `SELECT descrprod FROM tgfpro WHERE LENGTH(descrprod) = 3 AND NOT (LENGTH(descrprod) = 3 AND REGEXP_LIKE(descrprod, '^[0-9]{3}$')) AND NOT (LENGTH(descrprod) = 4 AND REGEXP_LIKE(descrprod, '^[0-9]{3}[A-Za-z]$')) AND NOT (LENGTH(descrprod) = 3 AND REGEXP_LIKE(descrprod, '^K[0-9]{2}$')) AND NOT (LENGTH(descrprod) = 2 AND REGEXP_LIKE(descrprod, '^[A-Za-z]{2}$')) AND NOT (LENGTH(descrprod) = 2)`
+        `SELECT SUBSTR(descrprod, INSTR(descrprod, '.', 1, 6)+1)
+        FROM tgfpro
+        WHERE REGEXP_LIKE(descrprod, '^\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+\\.\\w+$')`
       );
     }
-
+    
     return params;
   } catch (err) {
     console.error(err);
